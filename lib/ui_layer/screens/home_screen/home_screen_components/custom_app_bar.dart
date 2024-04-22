@@ -23,6 +23,7 @@ class CustomAppBar extends StatelessWidget {
           Container(
             margin: EdgeInsets.symmetric(horizontal: 26.w),
             child: InkWell(
+              borderRadius: BorderRadius.circular(50),
               onTap: (){},
               child: Container(
                 width: 40,
