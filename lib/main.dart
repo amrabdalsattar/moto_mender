@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
-
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:moto_mender/ui_layer/screens/auth_screens/login_screen.dart';
 import 'package:moto_mender/ui_layer/screens/home_screen/home_screen.dart';
 
 import 'package:moto_mender/utils/app_theme.dart';
@@ -24,7 +23,7 @@ class MyApp extends StatelessWidget {
       builder: (_, child) => MaterialApp(
 
         debugShowCheckedModeBanner: false,
-        home: const HomeScreen(),
+        home: const LoginScreen(),
         theme: AppTheme.themeData,
       ),
     );

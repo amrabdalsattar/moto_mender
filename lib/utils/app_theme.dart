@@ -23,5 +23,17 @@ class AppTheme {
           headlineMedium: TextStyle(
               color: AppColors.black,
               fontSize: 15.sp,
-              fontWeight: FontWeight.w600)));
+              fontWeight: FontWeight.w600),
+        headlineLarge: TextStyle(
+          color: AppColors.accentColor,
+          fontSize: 24.sp,
+          fontWeight: FontWeight.w700
+        ),
+        headlineSmall: TextStyle(
+          color: AppColors.midGrey,
+          fontSize: 16.sp,
+          fontWeight: FontWeight.w400
+        ),
+      )
+  );
 }

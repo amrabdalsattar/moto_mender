@@ -5,7 +5,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:moto_mender/data_layer/models/failure.dart';
 import 'package:moto_mender/utils/base_states.dart';
 
-import '../../domain_layer/use_cases/login_usecase.dart';
+import '../../domain_layer/use_cases/auth_usecases/login_usecase.dart';
 
 class LoginViewModel extends Cubit<BaseState> {
   GlobalKey<FormState> formKey = GlobalKey<FormState>();
@@ -16,15 +16,14 @@ class LoginViewModel extends Cubit<BaseState> {
 
   LoginViewModel(this.loginUseCase) : super(BaseInitialState());
 
-  void login() {
+  void login() async {
     if (!formKey.currentState!.validate()) return;
     emit(BaseLoadingState());
 
-    Either<Failure, bool> response =
-        loginUseCase.execute(email.text, password.text);
+    Either<Failure, bool> response = await loginUseCase.executeLogin(
+        email: email.text, password: password.text);
 
-    response.fold(
-        (error) => emit(BaseErrorState(error.errorMessage)),
-            (success) => emit(BaseSuccessState()));
+    response.fold((error) => emit(BaseErrorState(error.errorMessage)),
+        (success) => emit(BaseSuccessState()));
   }
 }
