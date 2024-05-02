@@ -9,6 +9,7 @@ class RegisterViewModel extends Cubit {
   GlobalKey<FormState> formKey = GlobalKey();
   TextEditingController email = TextEditingController();
   TextEditingController password = TextEditingController();
+  TextEditingController reEnterPassword = TextEditingController();
   TextEditingController name = TextEditingController();
   TextEditingController phone = TextEditingController();
   TextEditingController address = TextEditingController();
@@ -17,17 +18,16 @@ class RegisterViewModel extends Cubit {
 
   RegisterViewModel(this.registerUseCase) : super(BaseInitialState());
 
-  void register(String email, String password, String name, String phone,
-      String address) async {
+  void register() async {
     if (!formKey.currentState!.validate()) return;
     emit(BaseLoadingState());
 
     Either<Failure, bool> response = await registerUseCase.executeRegister(
-        email: email,
-        password: password,
-        name: name,
-        phone: phone,
-        address: address);
+        email: email.text,
+        password: password.text,
+        name: name.text,
+        phone: phone.text,
+        address: address.text);
 
     response.fold((error) => emit(BaseErrorState(error.errorMessage)),
         (success) => emit(BaseSuccessState()));

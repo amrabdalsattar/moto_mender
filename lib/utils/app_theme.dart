@@ -22,16 +22,16 @@ class AppTheme {
       textTheme: TextTheme(
           headlineMedium: TextStyle(
               color: AppColors.black,
-              fontSize: 15.sp,
+              fontSize: 18.sp,
               fontWeight: FontWeight.w600),
         headlineLarge: TextStyle(
           color: AppColors.accentColor,
-          fontSize: 24.sp,
+          fontSize: 21.sp,
           fontWeight: FontWeight.w700
         ),
         headlineSmall: TextStyle(
           color: AppColors.midGrey,
-          fontSize: 16.sp,
+          fontSize: 14.sp,
           fontWeight: FontWeight.w400
         ),
       )

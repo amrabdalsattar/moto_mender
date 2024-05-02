@@ -6,6 +6,8 @@ import 'package:moto_mender/utils/providers/tabs_provider.dart';
 import 'package:provider/provider.dart';
 
 class HomeScreen extends StatelessWidget {
+
+  static const routeName = "homeScreen";
   const HomeScreen({super.key});
 
   @override

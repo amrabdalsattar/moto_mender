@@ -7,4 +7,5 @@ class AppAssets{
   static String lock = "assets/images/lock.png";
   static String eye = "assets/images/eye.png";
   static String email = "assets/images/email.png";
+  static String user = "assets/images/user.png";
 }

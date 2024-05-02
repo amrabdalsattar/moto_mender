@@ -7,10 +7,11 @@ import 'package:moto_mender/utils/base_states.dart';
 
 import '../../domain_layer/use_cases/auth_usecases/login_usecase.dart';
 
-class LoginViewModel extends Cubit<BaseState> {
+class LoginViewModel extends Cubit {
   GlobalKey<FormState> formKey = GlobalKey<FormState>();
   TextEditingController email = TextEditingController();
   TextEditingController password = TextEditingController();
+  bool passwordShowed = true;
 
   LoginUseCase loginUseCase;
 

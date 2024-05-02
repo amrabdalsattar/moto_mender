@@ -5,6 +5,7 @@ import 'package:moto_mender/domain_layer/use_cases/auth_usecases/login_usecase.d
 import 'package:moto_mender/ui_layer/screens/auth_screens/auth_shared_components/button.dart';
 import 'package:moto_mender/ui_layer/screens/auth_screens/auth_shared_components/text_button.dart';
 import 'package:moto_mender/ui_layer/screens/auth_screens/auth_shared_components/text_field.dart';
+import 'package:moto_mender/ui_layer/screens/auth_screens/register_screen.dart';
 import 'package:moto_mender/utils/app_assets.dart';
 import 'package:moto_mender/utils/base_states.dart';
 import 'package:moto_mender/utils/dialog_utils.dart';
@@ -13,6 +14,8 @@ import 'package:moto_mender/utils/view_models/login_view_model.dart';
 import '../../../data_layer/repos/auth_repo/auth_repo_impl.dart';
 
 class LoginScreen extends StatelessWidget {
+
+  static const routeName = "loginScreen";
   const LoginScreen({super.key});
 
   @override
@@ -73,7 +76,8 @@ class LoginScreen extends StatelessWidget {
                     hintText: 'Enter Password',
                     prefixIconPath: AppAssets.lock,
                     textInputType: TextInputType.visiblePassword,
-                    isPassword: true,
+                    isPassword: viewModel.passwordShowed,
+                    eyeVisibility: true,
                   ),
                   Align(
                       alignment: Alignment.bottomRight,
@@ -87,11 +91,16 @@ class LoginScreen extends StatelessWidget {
                       viewModel.login();
                     },
                   ),
+                  SizedBox(
+                    height: 50.h,
+                  ),
                   Row(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
                       Text("You don't have an Account?", style: Theme.of(context).textTheme.headlineSmall,),
-                      const CustomTextButton(text: "Sign Up")
+                      CustomTextButton(text: "Sign Up", onPressed: () {
+                        Navigator.pushNamed(context, RegisterScreen.routeName);
+                      },)
                     ],
                   )
                 ],

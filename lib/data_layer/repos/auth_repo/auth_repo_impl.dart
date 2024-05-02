@@ -51,13 +51,13 @@ class AuthRepoImpl extends AuthRepo {
     if ((connectivityResult == ConnectivityResult.wifi ||
         connectivityResult == ConnectivityResult.mobile)) {
 
-      Uri url = Uri.http("10.0.2.2:800", "/user/login");
+      Uri url = Uri.http("10.0.2.2:800", "/user/register");
       Response serverResponse = await post(url, body: {
-        "name": name,
-        "email": email,
-        "phone": phone,
-        "address": address,
-        "password": password
+        "name" : name,
+        "email" : email,
+        "password" : password,
+        "phone" : phone,
+        "address" : address
       });
 
       AuthResponse loginResponse =

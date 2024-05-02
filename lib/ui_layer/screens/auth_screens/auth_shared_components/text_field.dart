@@ -11,8 +11,10 @@ class CustomTextField extends StatelessWidget {
   final String prefixIconPath;
   final TextInputType textInputType;
   final bool isPassword;
+  final bool eyeVisibility;
+  final void Function()? onEyeTap;
 
-  const CustomTextField(
+const CustomTextField(
       {super.key,
       required this.controller,
       this.validator,
@@ -20,7 +22,7 @@ class CustomTextField extends StatelessWidget {
       required this.prefixIconPath,
       required this.textInputType,
       this.isPassword = false,
-      required this.title});
+      required this.title, this.onEyeTap, this.eyeVisibility = false});
 
   @override
   Widget build(BuildContext context) {
@@ -64,6 +66,29 @@ class CustomTextField extends StatelessWidget {
                     ),
                   ),
                 ),
+                errorBorder: OutlineInputBorder(
+                  borderSide: BorderSide(color: AppColors.red, width: 2.0),
+                  borderRadius: const BorderRadius.all(
+                    Radius.circular(
+                      18.0,
+                    ),
+                  ),
+                ),
+                border: const OutlineInputBorder(
+                  borderRadius: BorderRadius.all(
+                    Radius.circular(
+                      18.0,
+                    ),
+                  ),
+                ),
+                disabledBorder: OutlineInputBorder(
+                  borderSide: BorderSide(color: AppColors.primary, width: 2),
+                  borderRadius: const BorderRadius.all(
+                    Radius.circular(
+                      18.0,
+                    ),
+                  ),
+                ),
                 isDense: true,
                 errorStyle: const TextStyle(fontSize: 15),
                 hintText: hintText,
@@ -76,9 +101,12 @@ class CustomTextField extends StatelessWidget {
                   color: AppColors.accentColor,
                 ),
                 suffixIcon: Visibility(
-                  visible: isPassword,
-                  child: ImageIcon(
-                    AssetImage(AppAssets.eye),
+                  visible: eyeVisibility,
+                  child: GestureDetector(
+                    onTap: onEyeTap,
+                    child: ImageIcon(
+                      AssetImage(AppAssets.eye),
+                    ),
                   ),
                 )),
             obscureText: isPassword,
