@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:moto_mender/ui_layer/screens/auth_screens/login_screen.dart';
-import 'package:moto_mender/ui_layer/screens/auth_screens/register_screen.dart';
-import 'package:moto_mender/ui_layer/screens/home_screen/home_screen.dart';
+import 'package:moto_mender/ui_layer/user_view/screens/auth_screens/login_screen.dart';
+import 'package:moto_mender/ui_layer/user_view/screens/auth_screens/register_screen.dart';
+import 'package:moto_mender/ui_layer/user_view/screens/home_screen/home_screen.dart';
 
 import 'package:moto_mender/utils/app_theme.dart';
 

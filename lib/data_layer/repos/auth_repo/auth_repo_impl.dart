@@ -1,14 +1,19 @@
-import 'dart:convert';
-
 import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:dartz/dartz.dart';
-import 'package:http/http.dart';
+import 'package:dio/dio.dart';
 import 'package:moto_mender/data_layer/models/failure.dart';
 import 'package:moto_mender/domain_layer/repos/auth_repo.dart';
+import 'package:moto_mender/utils/api/api_constants.dart';
 
 import '../../models/responses/auth_response.dart';
 
 class AuthRepoImpl extends AuthRepo {
+  late Dio dio;
+
+  AuthRepoImpl() {
+    ApiConstants.initDio(dio);
+  }
+
   @override
   Future<Either<Failure, bool>> login(
       {required String email, required String password}) async {
@@ -17,24 +22,23 @@ class AuthRepoImpl extends AuthRepo {
 
     if ((connectivityResult == ConnectivityResult.wifi ||
         connectivityResult == ConnectivityResult.mobile)) {
-      Uri url = Uri.http("10.0.2.2:800", "/user/login");
-      Response serverResponse =
-          await post(url, body: {"email": email, "password": password});
-      AuthResponse loginResponse =
-          AuthResponse.fromJson(jsonDecode(serverResponse.body));
-      if (serverResponse.statusCode >= 200 && serverResponse.statusCode < 300) {
-        print(loginResponse.message);
-        return const Right(true);
-      } else {
-        print("$email, $password");
-        print(serverResponse.statusCode);
-        print(loginResponse.message);
-        return Left(Failure(loginResponse.message ??
-            "Something went wrong, please try again later"));
+      try {
+        Response serverResponse = await dio
+            .post("/auth/login", data: {"email": email, "password": password});
+        AuthResponse loginResponse = AuthResponse.fromJson(serverResponse.data);
+        if (serverResponse.statusCode! >= 200 &&
+            serverResponse.statusCode! < 300) {
+          return const Right(true);
+        } else {
+          return Left(Failure(loginResponse.message ??
+              "Something went wrong, please try again later"));
+        }
+      } catch (e) {
+        return (Left(Failure(e.toString())));
       }
     } else {
-      return Left(NetworkFailure(
-          "Please check your internet connection and try again later"));
+      return (Left(NetworkFailure(
+          "Please check your internet connection and try again later")));
     }
   }
 
@@ -50,27 +54,25 @@ class AuthRepoImpl extends AuthRepo {
 
     if ((connectivityResult == ConnectivityResult.wifi ||
         connectivityResult == ConnectivityResult.mobile)) {
+      try {
+        Response serverResponse = await dio.post("/auth/register", data: {
+          "name": name,
+          "email": email,
+          "password": password,
+          "phone": phone,
+          "address": address
+        });
+        AuthResponse authResponse = AuthResponse.fromJson(serverResponse.data);
+        if (serverResponse.statusCode! >= 200 &&
+            serverResponse.statusCode! < 300) {
 
-      Uri url = Uri.http("10.0.2.2:800", "/user/register");
-      Response serverResponse = await post(url, body: {
-        "name" : name,
-        "email" : email,
-        "password" : password,
-        "phone" : phone,
-        "address" : address
-      });
-
-      AuthResponse loginResponse =
-          AuthResponse.fromJson(jsonDecode(serverResponse.body));
-      if (serverResponse.statusCode >= 200 && serverResponse.statusCode < 300) {
-        print(loginResponse.message);
-        return const Right(true);
-      } else {
-        print("$email, $password");
-        print(serverResponse.statusCode);
-        print(loginResponse.message);
-        return Left(Failure(loginResponse.message ??
-            "Something went wrong, please try again later"));
+          return const Right(true);
+        } else {
+          return Left(Failure(authResponse.message ??
+              "Something went wrong, please try again later"));
+        }
+      } catch (e) {
+        return Left(Failure(e.toString()));
       }
     } else {
       return Left(NetworkFailure(

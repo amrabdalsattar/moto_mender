@@ -32,4 +32,11 @@ class RegisterViewModel extends Cubit {
     response.fold((error) => emit(BaseErrorState(error.errorMessage)),
         (success) => emit(BaseSuccessState()));
   }
+
+  bool isPasswordStrong(String password) {
+    return
+        password.contains(RegExp(r'[A-Z]')) &&
+        password.contains(RegExp(r'[a-z]')) &&
+        password.contains(RegExp(r'[0-9]'));
+  }
 }

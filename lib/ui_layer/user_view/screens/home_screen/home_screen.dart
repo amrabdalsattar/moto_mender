@@ -1,9 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:moto_mender/ui_layer/screens/home_screen/home_screen_components/custom_app_bar.dart';
-import 'package:moto_mender/ui_layer/screens/home_screen/home_screen_components/custom_bottom_navigation_bar.dart';
 import 'package:moto_mender/utils/providers/tabs_provider.dart';
 import 'package:provider/provider.dart';
+
+import 'home_screen_components/custom_app_bar.dart';
+import 'home_screen_components/custom_bottom_navigation_bar.dart';
 
 class HomeScreen extends StatelessWidget {
 

@@ -1,33 +1,37 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:moto_mender/domain_layer/use_cases/auth_usecases/register_usecase.dart';
-import 'package:moto_mender/utils/view_models/register_view_model.dart';
+import 'package:moto_mender/domain_layer/use_cases/auth_usecases/login_usecase.dart';
+import 'package:moto_mender/ui_layer/user_view/screens/auth_screens/register_screen.dart';
+import 'package:moto_mender/utils/app_assets.dart';
+import 'package:moto_mender/utils/base_states.dart';
+import 'package:moto_mender/utils/dialog_utils.dart';
+import 'package:moto_mender/utils/view_models/login_view_model.dart';
 
-import '../../../data_layer/repos/auth_repo/auth_repo_impl.dart';
-import '../../../utils/app_assets.dart';
-import '../../../utils/base_states.dart';
-import '../../../utils/dialog_utils.dart';
+import '../../../../data_layer/repos/auth_repo/auth_repo_impl.dart';
 import 'auth_shared_components/button.dart';
 import 'auth_shared_components/text_button.dart';
 import 'auth_shared_components/text_field.dart';
 
-class RegisterScreen extends StatelessWidget {
 
-  static const routeName = "registerScreen";
-  const RegisterScreen({super.key});
+class LoginScreen extends StatelessWidget {
+
+  static const routeName = "loginScreen";
+  const LoginScreen({super.key});
 
   @override
   Widget build(BuildContext context) {
-    RegisterViewModel viewModel = RegisterViewModel(RegisterUseCase(AuthRepoImpl()));
+    LoginViewModel viewModel = LoginViewModel(LoginUseCase(AuthRepoImpl()));
     return Scaffold(
       body: BlocListener(
         bloc: viewModel,
         listener: (_, state) {
-          print("state : $state");
+
           if(state is BaseLoadingState){
             showLoading(context);
-          }else{
+          }else if(state is BaseErrorState){
+            Navigator.pop(context);
+          }else if(state is BaseSuccessState){
             Navigator.pop(context);
           }
         },
@@ -36,7 +40,7 @@ class RegisterScreen extends StatelessWidget {
           child: Form(
             key: viewModel.formKey,
             child: Padding(
-              padding: EdgeInsets.only(top: 60.h, right: 24.w, left: 24.w),
+              padding: EdgeInsets.only(top: 80.h, right: 24.w, left: 24.w),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.stretch,
                 children: [
@@ -48,18 +52,11 @@ class RegisterScreen extends StatelessWidget {
                     height: 5.h,
                   ),
                   Text(
-                    "Sign Up now to Enjoy our Services",
+                    "Log in to Enjoy our Services",
                     style: Theme.of(context).textTheme.headlineSmall,
                   ),
                   SizedBox(
-                    height: 6.h,
-                  ),
-                  CustomTextField(
-                    title: "Full Name",
-                    controller: viewModel.name,
-                    hintText: 'Enter your full name',
-                    prefixIconPath: AppAssets.user,
-                    textInputType: TextInputType.name,
+                    height: 18.h,
                   ),
                   CustomTextField(
                     title: "Email",
@@ -82,31 +79,30 @@ class RegisterScreen extends StatelessWidget {
                     hintText: 'Enter Password',
                     prefixIconPath: AppAssets.lock,
                     textInputType: TextInputType.visiblePassword,
-                    isPassword: true,
+                    isPassword: viewModel.passwordShowed,
+                    eyeVisibility: true,
                   ),
-                  CustomTextField(
-                    title: "Re Enter Password",
-                    controller: viewModel.reEnterPassword,
-                    hintText: 'Re Enter Password',
-                    prefixIconPath: AppAssets.lock,
-                    textInputType: TextInputType.visiblePassword,
-                    isPassword: true,
+                  Align(
+                      alignment: Alignment.bottomRight,
+                      child: CustomTextButton(
+                        text: "Forgot Password?",
+                        onPressed: () {},
+                      )),
+                  CustomButton(
+                    title: "Log In",
+                    onPressed: () {
+                      viewModel.login();
+                    },
                   ),
                   SizedBox(
-                    height: 25.h,
-                  ),
-                  CustomButton(
-                    title: "Sign Up",
-                    onPressed: () {
-                      viewModel.register();
-                    },
+                    height: 50.h,
                   ),
                   Row(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
-                      Text("Already have Account?", style: Theme.of(context).textTheme.headlineSmall,),
-                      CustomTextButton(text: "Log In", onPressed: () {
-                        Navigator.pop(context);
+                      Text("You don't have an Account?", style: Theme.of(context).textTheme.headlineSmall,),
+                      CustomTextButton(text: "Sign Up", onPressed: () {
+                        Navigator.pushNamed(context, RegisterScreen.routeName);
                       },)
                     ],
                   )
