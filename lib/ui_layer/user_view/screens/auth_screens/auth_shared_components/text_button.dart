@@ -19,7 +19,7 @@ class CustomTextButton extends StatelessWidget {
           style: Theme.of(context)
               .textTheme
               .headlineSmall
-              ?.copyWith(color: AppColors.orange, fontWeight: FontWeight.w500),
+              ?.copyWith(color: AppColors.primary, fontWeight: FontWeight.w500),
         ));
   }
 }

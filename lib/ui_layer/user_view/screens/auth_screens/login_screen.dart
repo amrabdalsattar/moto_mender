@@ -1,9 +1,9 @@
+import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:moto_mender/domain_layer/use_cases/auth_usecases/login_usecase.dart';
 import 'package:moto_mender/ui_layer/user_view/screens/auth_screens/register_screen.dart';
-import 'package:moto_mender/utils/app_assets.dart';
 import 'package:moto_mender/utils/base_states.dart';
 import 'package:moto_mender/utils/dialog_utils.dart';
 import 'package:moto_mender/utils/view_models/login_view_model.dart';
@@ -21,7 +21,7 @@ class LoginScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    LoginViewModel viewModel = LoginViewModel(LoginUseCase(AuthRepoImpl()));
+    LoginViewModel viewModel = LoginViewModel(LoginUseCase(AuthRepoImpl(Connectivity())));
     return Scaffold(
       body: BlocListener(
         bloc: viewModel,
@@ -62,8 +62,6 @@ class LoginScreen extends StatelessWidget {
                     title: "Email",
                     controller: viewModel.email,
                     hintText: 'example@mail.com',
-                    prefixIconPath: AppAssets.email,
-                    textInputType: TextInputType.emailAddress,
                     validator: (email) {
                       if (!RegExp(
                         r'^[\w-]+(\.[\w-]+)*@([\w-]+\.)+[a-zA-Z]{2,7}$',
@@ -77,10 +75,7 @@ class LoginScreen extends StatelessWidget {
                     title: "Password",
                     controller: viewModel.password,
                     hintText: 'Enter Password',
-                    prefixIconPath: AppAssets.lock,
-                    textInputType: TextInputType.visiblePassword,
-                    isPassword: viewModel.passwordShowed,
-                    eyeVisibility: true,
+
                   ),
                   Align(
                       alignment: Alignment.bottomRight,

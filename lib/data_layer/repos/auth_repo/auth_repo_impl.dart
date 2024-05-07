@@ -2,6 +2,7 @@ import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:dartz/dartz.dart';
 import 'package:dio/dio.dart';
 import 'package:moto_mender/data_layer/models/failure.dart';
+import 'package:moto_mender/data_layer/models/requests/register_request_data.dart';
 import 'package:moto_mender/domain_layer/repos/auth_repo.dart';
 import 'package:moto_mender/utils/api/api_constants.dart';
 
@@ -10,15 +11,28 @@ import '../../models/responses/auth_response.dart';
 class AuthRepoImpl extends AuthRepo {
   late Dio dio;
 
-  AuthRepoImpl() {
-    ApiConstants.initDio(dio);
+  AuthRepoImpl(this.connectivity) {
+    final options = BaseOptions(
+      baseUrl: ApiConstants.baseUrl,
+      connectTimeout: const Duration(seconds: 50),
+      receiveTimeout: const Duration(seconds: 50),
+      receiveDataWhenStatusError: true,
+    );
+    dio = Dio(options);
+    dio.interceptors.add(LogInterceptor(
+        error: true,
+        request: true,
+        requestBody: true,
+        requestHeader: true,
+        responseBody: true,
+        responseHeader: true));
   }
-
+  Connectivity connectivity;
   @override
   Future<Either<Failure, bool>> login(
       {required String email, required String password}) async {
     final ConnectivityResult connectivityResult =
-        await (Connectivity().checkConnectivity());
+        await (connectivity.checkConnectivity());
 
     if ((connectivityResult == ConnectivityResult.wifi ||
         connectivityResult == ConnectivityResult.mobile)) {
@@ -44,25 +58,17 @@ class AuthRepoImpl extends AuthRepo {
 
   @override
   Future<Either<Failure, bool>> register(
-      {required String email,
-      required String password,
-      required String name,
-      required String phone,
-      required String address}) async {
+      {required RegisterRequestData data}) async {
     final ConnectivityResult connectivityResult =
-        await (Connectivity().checkConnectivity());
+        await (connectivity.checkConnectivity());
 
     if ((connectivityResult == ConnectivityResult.wifi ||
         connectivityResult == ConnectivityResult.mobile)) {
       try {
-        Response serverResponse = await dio.post("/auth/register", data: {
-          "name": name,
-          "email": email,
-          "password": password,
-          "phone": phone,
-          "address": address
-        });
+        Response serverResponse = await dio.post("/auth/register", data: data.toJson());
+
         AuthResponse authResponse = AuthResponse.fromJson(serverResponse.data);
+
         if (serverResponse.statusCode! >= 200 &&
             serverResponse.statusCode! < 300) {
 

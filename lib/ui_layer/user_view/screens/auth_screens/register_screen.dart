@@ -1,3 +1,4 @@
+import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -20,7 +21,7 @@ class RegisterScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     RegisterViewModel viewModel =
-        RegisterViewModel(RegisterUseCase(AuthRepoImpl()));
+        RegisterViewModel(RegisterUseCase(AuthRepoImpl(Connectivity())));
     return Scaffold(
       body: BlocListener(
         bloc: viewModel,
@@ -59,8 +60,6 @@ class RegisterScreen extends StatelessWidget {
                     title: "Full Name",
                     controller: viewModel.name,
                     hintText: 'Enter your full name',
-                    prefixIconPath: AppAssets.user,
-                    textInputType: TextInputType.name,
                     validator: (fullNAme) {
                       if (!RegExp(r"[a-zA-Z]+(([',. -][a-zA-Z ])?[a-zA-Z]*)*$")
                               .hasMatch(fullNAme!) ||
@@ -74,8 +73,6 @@ class RegisterScreen extends StatelessWidget {
                     title: "Email",
                     controller: viewModel.email,
                     hintText: 'example@mail.com',
-                    prefixIconPath: AppAssets.email,
-                    textInputType: TextInputType.emailAddress,
                     validator: (email) {
                       if (!RegExp(
                         r'^[\w-]+(\.[\w-]+)*@([\w-]+\.)+[a-zA-Z]{2,7}$',
@@ -89,8 +86,7 @@ class RegisterScreen extends StatelessWidget {
                     title: "Phone",
                     controller: viewModel.phone,
                     hintText: '01XXXXXXXXX',
-                    prefixIconPath: AppAssets.email,
-                    textInputType: TextInputType.phone,
+
                     validator: (phone) {
                       if (phone!.length < 11) {
                         return "Please Enter a valid Egyptian Phone Number";
@@ -102,8 +98,7 @@ class RegisterScreen extends StatelessWidget {
                       title: "Address",
                       controller: viewModel.address,
                       hintText: 'City, Alley',
-                      prefixIconPath: AppAssets.email,
-                      textInputType: TextInputType.text,
+
                   validator: (address){
                         if(address!.isEmpty) return "Address is Required";
                         return null;
@@ -112,9 +107,8 @@ class RegisterScreen extends StatelessWidget {
                     title: "Password",
                     controller: viewModel.password,
                     hintText: 'Enter Password',
-                    prefixIconPath: AppAssets.lock,
-                    textInputType: TextInputType.visiblePassword,
-                    isPassword: true,
+
+
                     validator: (password) {
                       if (password == null || password.isEmpty) {
                         return "Please Enter your Password";
@@ -130,9 +124,8 @@ class RegisterScreen extends StatelessWidget {
                     title: "Re Enter Password",
                     controller: viewModel.reEnterPassword,
                     hintText: 'Re Enter Password',
-                    prefixIconPath: AppAssets.lock,
-                    textInputType: TextInputType.visiblePassword,
-                    isPassword: true,
+
+
                     validator: (rePassword) {
                       if (viewModel.password.text != rePassword ||
                           rePassword!.isEmpty) return "Passwords doesn't match";
