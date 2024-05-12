@@ -1,4 +1,5 @@
 import 'package:dartz/dartz.dart';
+import 'package:dio/dio.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:moto_mender/data_layer/models/requests/add_produt_request.dart';
@@ -13,8 +14,7 @@ class AddProductViewModel extends Cubit {
   TextEditingController category = TextEditingController();
   TextEditingController description = TextEditingController();
   TextEditingController price = TextEditingController();
-  TextEditingController imagePath = TextEditingController();
-  TextEditingController quantity = TextEditingController();
+  String imagePath = "";
 
   AddProductUseCase useCase;
 
@@ -28,11 +28,16 @@ class AddProductViewModel extends Cubit {
         data: AddProductRequest(
             category: category.text,
             description: description.text,
-            imagePath: imagePath.text,
+            imagePath: imagePath,
             name: name.text,
-            price: int.parse(price.text)));
+            price: double.parse(price.text)));
 
     response.fold((error) => emit(BaseErrorState(error.errorMessage)),
-        (success) => emit(BaseSuccessState()));
+        (success) => emit(AddProductSuccessState("Product Added Successfully")));
   }
+}
+
+class AddProductSuccessState{
+  String message;
+  AddProductSuccessState(this.message);
 }

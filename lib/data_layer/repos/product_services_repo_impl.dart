@@ -6,6 +6,7 @@ import 'package:moto_mender/domain_layer/repos/product_services_repo.dart';
 import 'package:moto_mender/utils/api/api_constants.dart';
 
 import '../models/requests/add_produt_request.dart';
+import '../models/responses/add_product_response.dart';
 
 class ProductServicesRepoImpl extends ProductServicesRepo {
   late Dio dio;
@@ -30,19 +31,28 @@ class ProductServicesRepoImpl extends ProductServicesRepo {
   @override
   Future<Either<Failure, bool>> addProduct(
       {required AddProductRequest data}) async {
+    print("data : ${data.name}");
+    final formData = FormData.fromMap({
+      "name" : data.name,
+      "description": data.description,
+      "price": data.price,
+      "category"  : data.category,
+      "imagePath" : MultipartFile.fromFile(data.imagePath!, filename: data.imagePath!.split("/").last)
+    });
     final ConnectivityResult connectivityResult =
         await (Connectivity().checkConnectivity());
 
     if ((connectivityResult == ConnectivityResult.wifi ||
         connectivityResult == ConnectivityResult.mobile)) {
       try{
-        Response serverResponse = await dio.post("/products", data: data.toJson());
-        // AddProductResponse addProductResponse = AddProductResponse.fromJson(serverResponse.data);
+        Response serverResponse = await dio.post("/products", data: formData);
+        AddProductResponse addProductResponse = AddProductResponse.fromJson(serverResponse.data);
           if (serverResponse.statusCode! >= 200 &&
               serverResponse.statusCode! < 300) {
+            print(addProductResponse.massage);
             return const Right(true);
           } else {
-            return Left(Failure("Error Message"));
+            return Left(Failure(addProductResponse.massage!));
           }
       }catch (e){
         return left(Failure(e.toString()));

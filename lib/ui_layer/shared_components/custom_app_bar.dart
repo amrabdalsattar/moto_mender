@@ -4,7 +4,8 @@ import 'package:moto_mender/utils/app_assets.dart';
 import 'package:moto_mender/utils/app_colors.dart';
 
 class CustomAppBar extends StatelessWidget {
-  const CustomAppBar({super.key});
+  final void Function()? onTap;
+  const CustomAppBar({super.key, this.onTap});
 
   @override
   Widget build(BuildContext context) {
@@ -24,7 +25,7 @@ class CustomAppBar extends StatelessWidget {
             margin: EdgeInsets.symmetric(horizontal: 26.w),
             child: InkWell(
               borderRadius: BorderRadius.circular(50),
-              onTap: (){},
+              onTap: onTap,
               child: Container(
                 width: 40,
                 decoration: BoxDecoration(
@@ -32,7 +33,7 @@ class CustomAppBar extends StatelessWidget {
                   borderRadius: BorderRadius.circular(50),
                 ),
                 child: Image.asset(
-                  AppAssets.shoppingBag,
+                  AppAssets.users,
                 ),
               ),
             ),

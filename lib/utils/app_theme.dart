@@ -12,6 +12,7 @@ class AppTheme {
             statusBarColor: AppColors.transparent),
         backgroundColor: AppColors.whiteBackground,
         elevation: 0,
+        iconTheme: IconThemeData(color: AppColors.black)
       ),
       bottomNavigationBarTheme: BottomNavigationBarThemeData(
         showSelectedLabels: true,

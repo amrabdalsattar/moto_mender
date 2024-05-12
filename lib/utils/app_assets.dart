@@ -8,4 +8,5 @@ class AppAssets{
   static String eye = "assets/images/eye.png";
   static String email = "assets/images/email.png";
   static String user = "assets/images/user.png";
+  static String users = "assets/images/users.png";
 }

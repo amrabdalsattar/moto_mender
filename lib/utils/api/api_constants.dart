@@ -6,7 +6,7 @@ class ApiConstants{
   static void initDio(Dio dio){
     final options = BaseOptions(
       baseUrl: baseUrl,
-      connectTimeout: const Duration(seconds: 5),
+      connectTimeout: const Duration(seconds: 50),
       receiveTimeout: const Duration(seconds: 50),
       receiveDataWhenStatusError: true,
     );

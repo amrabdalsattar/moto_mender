@@ -8,7 +8,7 @@ class AddProductRequest {
 
   String? name;
   String? description;
-  int? price;
+  double? price;
   String? category;
   String? imagePath;
 
